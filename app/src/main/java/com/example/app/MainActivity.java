@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements LocationListener {
 
@@ -39,7 +40,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     private static LocationManager locationManager;
 
     private static void showLocation() {
-        Location l = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location l = null;
+        while(l == null){
+            l = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+
         if(l != null){
             String str = "";
             str += Double.toString(l.getLatitude());
@@ -52,19 +57,21 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     }
 
 
+
     @Override
     public void onStart(){
         super.onStart();
         // ロケーションマネージャーのインスタンスを取得
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        final boolean gpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(!gpsEnable){
-            enableLocationSetting();
-        }
+//        String hoge = Double.toString(Double.MAX_VALUE);
+////        final boolean gpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+////        if(!gpsEnable){
+//            enableLocationSetting();
+//        }
 
         // 位置情報の更新を受け取るように設定
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        Toast.makeText(MainActivity.this, "hello world", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -141,7 +148,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             btn.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                    showLocation();
+                  Intent intent = new Intent();
+                  intent.setClassName("com.example.app", "com.example.app.CameraActivity");
+
+//                  intent.putExtra("lat);
+                  startActivity(intent);
+//                    showLocation();
                 }
             });
             return rootView;
